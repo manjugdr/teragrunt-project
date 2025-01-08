@@ -4,14 +4,14 @@ variable "region" {
 }
 
 variable "ami" {
-  description = "AMI ID for the EC2 instance"
+  description = "ami-053b12d3152c0cc71"
 }
 
 variable "instance_type" {
   description = "Instance type for the EC2"
-  default     = "t2.micro"
+  default     = "t2.medium"
 }
 
 variable "instance_name" {
-  description = "Name tag for the EC2 instance"
+  description = "teragrunt-ec2-instance"
 }
