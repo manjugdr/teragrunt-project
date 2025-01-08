@@ -1,10 +1,15 @@
-name: Deploy EC2 with Terragrunt
+name: Deploy with Terragrunt
 
 on:
-  push:
-    branches:
-      - main  # Trigger on push to the main branch
-  workflow_dispatch:  # Allow manual runs
+  workflow_dispatch:  # Allow manual runs with inputs
+    inputs:
+      deployment_target:
+        description: "Select the deployment target"  # Dropdown description
+        required: true
+        default: "ec2"
+        options:
+          - ec2
+          - eks
 
 jobs:
   deploy:
@@ -36,9 +41,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # Step 4: Navigate to Terragrunt directory and apply
-      - name: Deploy EC2 with Terragrunt
+      # Step 4: Run Terragrunt based on selection
+      - name: Deploy with Terragrunt
         run: |
           cd terragrunt  # Adjust path if needed
-          terragrunt init
-          terragrunt destroy -auto-approve
+          if [ "${{ github.event.inputs.deployment_target }}" == "ec2" ]; then
+            echo "Deploying EC2..."
+            terragrunt init
+            terragrunt apply -auto-approve
+          elif [ "${{ github.event.inputs.deployment_target }}" == "eks" ]; then
+            echo "Deploying EKS..."
+            terragrunt init
+            terragrunt apply -auto-approve
+          fi
