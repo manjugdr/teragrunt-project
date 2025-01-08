@@ -10,8 +10,3 @@ resource "aws_instance" "example" {
     Name = var.instance_name
   }
 }
-
-variable "region" {}
-variable "ami" {}
-variable "instance_type" {}
-variable "instance_name" {}
